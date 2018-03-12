@@ -1,0 +1,8 @@
+Requisitos Não Funcionais:
+-Privacidade : Localização dos usuários.
+-Precisão: Cerca de 10% da lotação.
+-Tempo de resposta: 4 segundos.
+-Atualização dos dados: A cada 5 minutos.
+-Acessos simultâneos
+-Tolerancia a falhas: Após um certo tempo, ocorre timeout e vem tela avisando que não foi possível acessar no momento -> liberação de requisições.
+-Redundância: Para caso de falhas/erros de leitura dos sensores.
