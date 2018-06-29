@@ -1,6 +1,7 @@
 package com.projetoteste.labsoft.projetoteste1;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -10,6 +11,8 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -20,16 +23,26 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Random;
+
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, com.google.android.gms.location.LocationListener {
 
     private GoogleMap mMap;
+    private Button find;
 
     private static final int MY_PERMISSIONS_REQUEST_CODE = 11;
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 10;
@@ -44,6 +57,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private static int FASTEST_INTERVAL = 3000;
     private static int DISPLACEMENT = 10;
 
+    HashMap<Marker, Market> mapMarket = new HashMap<Marker, Market>();
+
     Marker myCurrent;
 
     @Override
@@ -55,6 +70,55 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         setUpLocation();
+        find = findViewById(R.id.find);
+        find.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                double northLat = mMap.getProjection().getVisibleRegion().latLngBounds.northeast.latitude;
+                double southLat = mMap.getProjection().getVisibleRegion().latLngBounds.southwest.latitude;
+                double eastLng = mMap.getProjection().getVisibleRegion().latLngBounds.northeast.longitude;
+                double westLng = mMap.getProjection().getVisibleRegion().latLngBounds.southwest.longitude;
+                mMap.clear();
+                displayLocation(false);
+                try {
+                    JSONArray mercados = getMercados(northLat,southLat, eastLng, westLng);
+                    for (int i = 0; i < mercados.length(); i++) {
+                        JSONObject item = mercados.getJSONObject(i);
+                        LatLng latLng = new LatLng(item.getDouble("latitude"), item.getDouble("longitude"));
+                        double lotacaoPorcentagem = item.getDouble("lotacao") * 100 / item.getDouble("maximo");
+                        Marker marker;
+                        if (lotacaoPorcentagem <= 30) {
+                            marker = mMap.addMarker(new MarkerOptions().position(latLng).title(item.getString("nome")).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+                        } else if (lotacaoPorcentagem <= 60) {
+                            marker = mMap.addMarker(new MarkerOptions().position(latLng).title(item.getString("nome")).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));
+                        } else {
+                            marker = mMap.addMarker(new MarkerOptions().position(latLng).title(item.getString("nome")).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+                        }
+                        Market market = new Market();
+                        market.setId(item.getLong("id"));
+                        market.setLotacao(item.getInt("lotacao"));
+                        market.setMaximo(item.getInt("maximo"));
+                        market.setNome(item.getString("nome"));
+                        mapMarket.put(marker,market);
+                        mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+                            @Override
+                            public void onInfoWindowClick(Marker marker) {
+                                Market market = mapMarket.get(marker);
+                                if(market!=null){
+                                Intent intent = new Intent(MapsActivity.this, DetailsActivity.class);
+                                intent.putExtra("nomeMercado", market.getNome());
+                                intent.putExtra("lotacao", market.getLotacao());
+                                intent.putExtra("maximo", market.getMaximo());
+                                startActivity(intent);
+                                }
+                            }
+                        });
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
 
@@ -79,12 +143,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         } else if (checkPlayServices()) {
             buildGoogleApiClient();
             createLocationRequest();
-            displayLocation();
+            displayLocation(true);
         }
 
     }
 
-    private void displayLocation() {
+    private void displayLocation(boolean zoomAnimation) {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
@@ -98,8 +162,44 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             if (myCurrent != null){
                 myCurrent.remove();
             }
-            myCurrent=mMap.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude)).title("YOU"));
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude,longitude), 12.0f));
+            myCurrent=mMap.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude)).title("Sua posição").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+            if (zoomAnimation) {
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 18.0f));
+                double northLat = mMap.getProjection().getVisibleRegion().latLngBounds.northeast.latitude;
+                double southLat = mMap.getProjection().getVisibleRegion().latLngBounds.southwest.latitude;
+                double eastLng = mMap.getProjection().getVisibleRegion().latLngBounds.northeast.longitude;
+                double westLng = mMap.getProjection().getVisibleRegion().latLngBounds.southwest.longitude;
+                try {
+                    JSONArray mercados = getMercados(northLat,southLat, eastLng, westLng);
+                    for (int i = 0; i < mercados.length(); i++) {
+                        JSONObject item = mercados.getJSONObject(i);
+                        LatLng latLng = new LatLng(item.getDouble("latitude"), item.getDouble("longitude"));
+                        double lotacaoPorcentagem = item.getDouble("lotacao") * 100 / item.getDouble("maximo");
+                        if (lotacaoPorcentagem <= 30) {
+                            mMap.addMarker(new MarkerOptions().position(latLng).title(item.getString("nome")).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)).snippet("TESTE"));
+                        } else if (lotacaoPorcentagem <= 60) {
+                            mMap.addMarker(new MarkerOptions().position(latLng).title(item.getString("nome")).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));
+                        } else {
+                            mMap.addMarker(new MarkerOptions().position(latLng).title(item.getString("nome")).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+                        }
+                    }
+                    mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+                        @Override
+                        public void onInfoWindowClick(Marker marker) {
+                            Market market = mapMarket.get(marker);
+                            if(market!=null){
+                                Intent intent = new Intent(MapsActivity.this, DetailsActivity.class);
+                                intent.putExtra("nomeMercado", market.getNome());
+                                intent.putExtra("lotacao", market.getLotacao());
+                                intent.putExtra("maximo", market.getMaximo());
+                                startActivity(intent);
+                            }
+                        }
+                    });
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
@@ -140,7 +240,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     if (checkPlayServices()) {
                         buildGoogleApiClient();
                         createLocationRequest();
-                        displayLocation();
+                        displayLocation(true);
                     }
                 }
                 break;
@@ -161,7 +261,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-        displayLocation();
+        displayLocation(true);
         startLocationUpdates();
     }
 
@@ -178,6 +278,104 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onLocationChanged(Location location) {
         mLastLocation=location;
-        displayLocation();
+        displayLocation(false);
+    }
+
+    public JSONArray getMercados(double latitude, double longitude) throws JSONException{
+        JSONArray mercados = new JSONArray();
+        for (int i = 0; i< 5; i++){
+           JSONObject mercado = new JSONObject();
+           String nome = "Supermercado ";
+           Random rn = new Random();
+           int randMercado = rn.nextInt(3) + 1;
+           if (randMercado == 1) {
+               nome += "Extra";
+           } else if (randMercado == 2){
+               nome += "Carrefour";
+           } else if (randMercado == 3){
+               nome += "Pão de Açucar";
+           }
+           mercado.put("nome",nome);
+           int randMaximo = rn.nextInt(2001) + 1000;
+           int randPorcentagem = rn.nextInt(101);
+           double lotacao = (((double) randPorcentagem)/100)*randMaximo;
+           mercado.put("maximo",randMaximo);
+           mercado.put("lotacao", lotacao);
+           int latitudeMercado = rn.nextInt(401);
+           int longitudeMercado = rn.nextInt(401);
+           mercado.put("longitude",longitude - 0.02 + (double) longitudeMercado/10000);
+           mercado.put("latitude",latitude - 0.02 + (double) latitudeMercado/10000);
+           mercados.put(mercado);
+        }
+        return mercados;
+    }
+
+    public JSONArray getMercados(double northLat, double southLat, double eastLng, double westLng) throws JSONException{
+        JSONArray mercados = new JSONArray();
+        for (int i = 0; i< 5; i++){
+            JSONObject mercado = new JSONObject();
+            String nome = "Supermercado ";
+            Random rn = new Random();
+            int randMercado = rn.nextInt(3) + 1;
+            if (randMercado == 1) {
+                nome += "Extra";
+            } else if (randMercado == 2){
+                nome += "Carrefour";
+            } else if (randMercado == 3){
+                nome += "Pão de Açucar";
+            }
+            mercado.put("nome",nome);
+            int randMaximo = rn.nextInt(2001) + 1000;
+            int randPorcentagem = rn.nextInt(101);
+            double lotacao = (((double) randPorcentagem)/100)*randMaximo;
+            mercado.put("maximo",randMaximo);
+            mercado.put("lotacao", lotacao);
+            double randomLat = southLat + (northLat - southLat) * rn.nextDouble();
+            double randomLng = westLng + (eastLng - westLng) * rn.nextDouble();
+            mercado.put("latitude",randomLat);
+            mercado.put("longitude",randomLng);
+            mercado.put("id", rn.nextLong());
+            mercados.put(mercado);
+        }
+        return mercados;
+    }
+
+    private class Market {
+        private Long id;
+        private String nome;
+        private int lotacao;
+        private int maximo;
+
+        public int getMaximo() {
+            return maximo;
+        }
+
+        public void setMaximo(int maximo) {
+            this.maximo = maximo;
+        }
+
+        public int getLotacao() {
+            return lotacao;
+        }
+
+        public void setLotacao(int lotacao) {
+            this.lotacao = lotacao;
+        }
+
+        public String getNome() {
+            return nome;
+        }
+
+        public void setNome(String nome) {
+            this.nome = nome;
+        }
+
+        public Long getId() {
+            return id;
+        }
+
+        public void setId(Long id) {
+            this.id = id;
+        }
     }
 }

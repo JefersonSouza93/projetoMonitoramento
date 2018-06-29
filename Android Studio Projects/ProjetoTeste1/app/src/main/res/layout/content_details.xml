@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".DetailsActivity"
+    tools:showIn="@layout/activity_details">
+
+
+    <TextView
+        android:id="@+id/lotacaoIndex"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="30dp"
+        android:layout_marginEnd="22dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="22dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="50dp"
+        android:text="Lotacao"
+        app:layout_constraintBottom_toTopOf="@+id/MaximoIndex"
+        app:layout_constraintEnd_toStartOf="@+id/lotacaoValue"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/lotacaoValue"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="30dp"
+        android:layout_marginEnd="46dp"
+        android:layout_marginRight="46dp"
+        android:layout_marginTop="50dp"
+        app:layout_constraintBottom_toTopOf="@+id/MaximoValue"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/lotacaoIndex"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/MaximoIndex"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="93dp"
+        android:layout_marginEnd="22dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="22dp"
+        android:layout_marginStart="16dp"
+        android:text="Maximo"
+        app:layout_constraintBottom_toTopOf="@+id/consultarHistorico"
+        app:layout_constraintEnd_toStartOf="@+id/MaximoValue"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lotacaoIndex" />
+
+    <TextView
+        android:id="@+id/MaximoValue"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="93dp"
+        android:layout_marginEnd="46dp"
+        android:layout_marginRight="46dp"
+        app:layout_constraintBottom_toTopOf="@+id/consultarHistorico"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/MaximoIndex"
+        app:layout_constraintTop_toBottomOf="@+id/lotacaoValue" />
+
+    <Button
+        android:id="@+id/consultarHistorico"
+        android:layout_width="0dp"
+        android:layout_height="44dp"
+        android:layout_marginBottom="265dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginStart="16dp"
+        android:text="Consultar Histórico"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/MaximoValue" />
+
+</android.support.constraint.ConstraintLayout>
