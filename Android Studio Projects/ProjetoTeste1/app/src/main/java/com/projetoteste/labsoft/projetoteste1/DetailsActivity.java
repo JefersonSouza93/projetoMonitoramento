@@ -22,7 +22,8 @@ public class DetailsActivity extends AppCompatActivity {
         Intent intent = getIntent();
         int lotacao = intent.getIntExtra("lotacao", 0);
         int maximo = intent.getIntExtra("maximo", 0);
-        String nomeMercado = intent.getStringExtra("nomeMercado");
+        final String nomeMercado = intent.getStringExtra("nomeMercado");
+        final Long idMercado = intent.getLongExtra("id",0L);
 
         TextView textNomeMercado = findViewById(R.id.nomeMercado);
         textNomeMercado.setText(nomeMercado);
@@ -36,7 +37,10 @@ public class DetailsActivity extends AppCompatActivity {
         consultarHistorico.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(DetailsActivity.this, HistoricActivity.class);
+                intent.putExtra("nomeMercado", nomeMercado);
+                intent.putExtra("id", idMercado );
+                startActivity(intent);
             }
         });
 

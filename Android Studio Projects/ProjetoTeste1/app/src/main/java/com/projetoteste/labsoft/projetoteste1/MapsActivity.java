@@ -100,12 +100,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             public void onInfoWindowClick(Marker marker) {
                                 Market market = mapMarket.get(marker);
                                 if(market!=null){
-                                Intent intent = new Intent(MapsActivity.this, DetailsActivity.class);
-                                intent.putExtra("nomeMercado", market.getNome());
-                                intent.putExtra("lotacao", market.getLotacao());
-                                intent.putExtra("maximo", market.getMaximo());
-                                intent.putExtra("id", market.getId());
-                                startActivity(intent);
+                                    Intent intent = new Intent(MapsActivity.this, DetailsActivity.class);
+                                    intent.putExtra("nomeMercado", market.getNome());
+                                    intent.putExtra("lotacao", market.getLotacao());
+                                    intent.putExtra("maximo", market.getMaximo());
+                                    intent.putExtra("id", market.getId());
+                                    startActivity(intent);
                                 }
                             }
                         });
@@ -160,41 +160,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
             myCurrent=mMap.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude)).title("Sua posição").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
             if (zoomAnimation) {
-                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 18.0f));
-                double northLat = mMap.getProjection().getVisibleRegion().latLngBounds.northeast.latitude;
-                double southLat = mMap.getProjection().getVisibleRegion().latLngBounds.southwest.latitude;
-                double eastLng = mMap.getProjection().getVisibleRegion().latLngBounds.northeast.longitude;
-                double westLng = mMap.getProjection().getVisibleRegion().latLngBounds.southwest.longitude;
-                try {
-                    JSONArray mercados = getMercados(northLat,southLat, eastLng, westLng);
-                    for (int i = 0; i < mercados.length(); i++) {
-                        JSONObject item = mercados.getJSONObject(i);
-                        LatLng latLng = new LatLng(item.getDouble("latitude"), item.getDouble("longitude"));
-                        double lotacaoPorcentagem = item.getDouble("lotacao") * 100 / item.getDouble("maximo");
-                        if (lotacaoPorcentagem <= 30) {
-                            mMap.addMarker(new MarkerOptions().position(latLng).title(item.getString("nome")).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)).snippet("TESTE"));
-                        } else if (lotacaoPorcentagem <= 60) {
-                            mMap.addMarker(new MarkerOptions().position(latLng).title(item.getString("nome")).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));
-                        } else {
-                            mMap.addMarker(new MarkerOptions().position(latLng).title(item.getString("nome")).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
-                        }
-                    }
-                    mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
-                        @Override
-                        public void onInfoWindowClick(Marker marker) {
-                            Market market = mapMarket.get(marker);
-                            if(market!=null){
-                                Intent intent = new Intent(MapsActivity.this, DetailsActivity.class);
-                                intent.putExtra("nomeMercado", market.getNome());
-                                intent.putExtra("lotacao", market.getLotacao());
-                                intent.putExtra("maximo", market.getMaximo());
-                                startActivity(intent);
-                            }
-                        }
-                    });
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 15.0f));
             }
         }
     }
