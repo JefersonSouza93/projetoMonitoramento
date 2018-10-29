@@ -1,10 +1,7 @@
 package AcessoBancoDeDados;
-import Entidades.*;
-import org.hibernate.HibernateException;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
+import org.hibernate.*;
+
+import java.util.List;
 
 public class AcessadorBanco {
 
@@ -14,20 +11,22 @@ public class AcessadorBanco {
 
     }
 
-    public void selectSupermercadosEmRegiao(double latitude, double longitude){
+    public static List SelectGeral(String sqlQuery){
         Session session = factory.openSession();
         Transaction tx = null;
+        SQLQuery query = session.createSQLQuery(sqlQuery);
 
         try {
+
             tx = session.beginTransaction();
-            Supermercado supermercado = (Supermercado)session.get(Supermercado.class, 1);
-            session.delete(supermercado);
-            tx.commit();
+            List results = query.list();
+            return results;
         } catch (HibernateException e) {
             if (tx!=null) tx.rollback();
             e.printStackTrace();
         } finally {
             session.close();
+            return null;
         }
     }
 
