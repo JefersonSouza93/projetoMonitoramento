@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="hibernate-search-orm-5.8.0.Final">
-    <CLASSES>
-      <root url="jar://$APPLICATION_HOME_DIR$/lib/hibernate-search-orm-5.8.0.Final.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>
