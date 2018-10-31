@@ -1,6 +1,5 @@
 package Entidades;
 
-
 public class Supermercado {
 
     long id;
@@ -10,21 +9,12 @@ public class Supermercado {
     double latitude;
     double longitude;
     String endereco;
-
-    public Lotacao getLotacao() {
-        return lotacao;
-    }
-
-    public void setLotacao(Lotacao lotacao) {
-        this.lotacao = lotacao;
-    }
-
-    Lotacao lotacao;
+    double lotacaoAtual;
+    double lotacaoMaxima;
 
     public long getId() {
         return id;
     }
-
     public void setId(long id) {
         this.id = id;
     }
@@ -32,7 +22,6 @@ public class Supermercado {
     public String getNome() {
         return nome;
     }
-
     public void setNome(String nome) {
         this.nome = nome;
     }
@@ -40,7 +29,6 @@ public class Supermercado {
     public String getDescricao() {
         return descricao;
     }
-
     public void setDescricao(String descricao) {
         this.descricao = descricao;
     }
@@ -48,7 +36,6 @@ public class Supermercado {
     public String getRede() {
         return rede;
     }
-
     public void setRede(String rede) {
         this.rede = rede;
     }
@@ -56,7 +43,6 @@ public class Supermercado {
     public double getLatitude() {
         return latitude;
     }
-
     public void setLatitude(double latitude) {
         this.latitude = latitude;
     }
@@ -64,7 +50,6 @@ public class Supermercado {
     public double getLongitude() {
         return longitude;
     }
-
     public void setLongitude(double longitude) {
         this.longitude = longitude;
     }
@@ -72,9 +57,22 @@ public class Supermercado {
     public String getEndereco() {
         return endereco;
     }
-
     public void setEndereco(String endereco) {
         this.endereco = endereco;
+    }
+
+    public double getLotacaoAtual() {
+        return lotacaoAtual;
+    }
+    public void setLotacaoAtual(long lotacaoAtual) {
+        this.lotacaoAtual = lotacaoAtual;
+    }
+
+    public double getLotacaoMaxima() {
+        return lotacaoMaxima;
+    }
+    public void setLotacaoMaxima(long lotacaoMaxima) {
+        this.lotacaoMaxima = lotacaoMaxima;
     }
 
 }

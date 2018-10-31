@@ -4,11 +4,11 @@ import com.lambdaworks.redis.*;
 
 public class AcessadorRedis {
 
-    private RedisClient client;
-    private RedisConnection<String, String> connection;
+    private static RedisClient client;
+    private static RedisConnection<String, String> connection;
 
 
-    private void Conectar() {
+    private static void Conectar() {
         client = new RedisClient(RedisURI);
                 //create("redis://password@host:port"));
         connection = client.connect();
@@ -19,7 +19,7 @@ public class AcessadorRedis {
      * @param search o valor do topico do Redis.
      * @return O string encontrado pelo Redis.
      */
-    public Object SelectObjeto(String search){
+    public static String SelectObjeto(String search){
         Conectar();
         String textObject = connection.get(search);
         Desconectar();
@@ -28,9 +28,10 @@ public class AcessadorRedis {
 
     /**
      * Salva um string no Redis
-     * @param search o valor do topico do Redis.
+     * @param search string de busca
+     * @param textObject valor do objeto
      */
-    public void SalvaInformacoes(String search, String textObject){
+    public static void Salvar(String search, String textObject){
         //salva json em uma nova entrada do Redis
         Conectar();
         connection.set(search, textObject);
@@ -38,7 +39,7 @@ public class AcessadorRedis {
         //map string to object
     }
 
-    private void Desconectar(){
+    private static void Desconectar(){
         connection.close();
         client.shutdown();
     }

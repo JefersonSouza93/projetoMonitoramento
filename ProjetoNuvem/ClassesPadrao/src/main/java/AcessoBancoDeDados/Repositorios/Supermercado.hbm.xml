@@ -20,7 +20,8 @@
         <property name = "endereco" column = "salary" type = "string"/>
         <property name = "latitude" column = "salary" type = "double"/>
         <property name = "longitude" column = "salary" type = "double"/>
-        <property name = "Lotacao" column = "salary" type = "class"/>
+        <property name = "lotacaoAtual" column = "salary" type = "class"/>
+        <property name = "lotacaoMaxima" column = "salary" type = "class"/>
 
     </class>
 </hibernate-mapping>
