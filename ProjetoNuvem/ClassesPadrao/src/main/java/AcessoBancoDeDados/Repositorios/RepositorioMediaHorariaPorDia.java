@@ -1,11 +1,10 @@
 package AcessoBancoDeDados.Repositorios;
 
+import AcessoBancoDeDados.AcessadorBanco;
 import Entidades.Enums.DiaDaSemana;
 import Entidades.MediaHorariaPorDia;
 
 import java.util.List;
-
-import static AcessoBancoDeDados.AcessadorBanco.SelectGeralLista;
 
 public class RepositorioMediaHorariaPorDia {
 
@@ -14,7 +13,8 @@ public class RepositorioMediaHorariaPorDia {
                 "WHERE DiaDaSemana = " + diaDaSemana.ordinal() +
                 "AND SupermercadoId = " + supermercadoId + ";";
         try{
-            List medias = SelectGeralLista(sqlQuery, MediaHorariaPorDia.class);
+            AcessadorBanco acessador = new AcessadorBanco();
+            List medias = acessador.selectGeralLista(sqlQuery, MediaHorariaPorDia.class);
             return medias;
         }
         catch(Exception e){
@@ -29,7 +29,8 @@ public class RepositorioMediaHorariaPorDia {
         String sqlQuery = "SELECT * FROM SUPERMERCADO" +
                 "WHERE SupermercadoId = " + supermercadoId + ";";
         try{
-            List medias = SelectGeralLista(sqlQuery, MediaHorariaPorDia.class);
+            AcessadorBanco acessador = new AcessadorBanco();
+            List medias = acessador.selectGeralLista(sqlQuery, MediaHorariaPorDia.class);
             return medias;
         }
         catch(Exception e){

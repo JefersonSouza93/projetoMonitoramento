@@ -9,9 +9,9 @@ public class AcessadorRedis {
 
 
     private static void Conectar() {
-        client = new RedisClient(RedisURI);
+        //client = new RedisClient(RedisURI);
                 //create("redis://password@host:port"));
-        connection = client.connect();
+        //connection = client.connect();
     }
 
     /**

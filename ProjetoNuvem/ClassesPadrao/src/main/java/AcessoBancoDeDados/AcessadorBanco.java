@@ -2,16 +2,22 @@ package AcessoBancoDeDados;
 import org.hibernate.*;
 
 import java.util.List;
+import org.hibernate.cfg.Configuration;
 
 public class AcessadorBanco {
 
     private static SessionFactory factory;
 
-    private void Conectar(){
-
+    public AcessadorBanco(){
+        try {
+            factory = new Configuration().configure().buildSessionFactory();
+            } catch (Throwable ex) {
+            System.err.println("Initial SessionFactory creation failed. " + ex);
+            ex.printStackTrace();
+            }
     }
 
-    public static List SelectGeralLista(String sqlQuery, Class classe){
+    public List selectGeralLista(String sqlQuery, Class classe){
         Session session = factory.openSession();
         Transaction tx = null;
         SQLQuery query = session.createSQLQuery(sqlQuery);
@@ -32,7 +38,7 @@ public class AcessadorBanco {
         }
     }
 
-    public static Object SelectGeralObjeto(String sqlQuery, Class classe){
+    public Object selectGeralObjeto(String sqlQuery, Class classe){
         Session session = factory.openSession();
         Transaction tx = null;
         SQLQuery query = session.createSQLQuery(sqlQuery);
@@ -53,7 +59,7 @@ public class AcessadorBanco {
         }
     }
 
-    public static void AddOrUpdateOrDelete(String sqlQuery, Class classe){
+    public void addOrUpdateOrDelete(String sqlQuery, Class classe){
         Session session = factory.openSession();
         Transaction tx = null;
         SQLQuery query = session.createSQLQuery(sqlQuery);

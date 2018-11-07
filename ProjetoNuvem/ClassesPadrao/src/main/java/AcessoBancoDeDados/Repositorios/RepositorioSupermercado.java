@@ -1,11 +1,8 @@
 package AcessoBancoDeDados.Repositorios;
 
+import AcessoBancoDeDados.AcessadorBanco;
 import Entidades.Supermercado;
 import java.util.List;
-
-import static AcessoBancoDeDados.AcessadorBanco.AddOrUpdateOrDelete;
-import static AcessoBancoDeDados.AcessadorBanco.SelectGeralLista;
-import static AcessoBancoDeDados.AcessadorBanco.SelectGeralObjeto;
 
 public class RepositorioSupermercado {
 
@@ -16,7 +13,8 @@ public class RepositorioSupermercado {
                 "WHERE Latitude < {" + latitudeMin + "} AND Latitude > {" + latitudeMax + "}" +
                 "AND Longitude < {" + longitudeMin + "} AND Longitude > {" + longitudeMax + "}";
         try{
-            List supermercados = SelectGeralLista(sqlQuery, Supermercado.class);
+            AcessadorBanco acessador = new AcessadorBanco();
+            List supermercados = acessador.selectGeralLista(sqlQuery, Supermercado.class);
             return supermercados;
         }
         catch(Exception e){
@@ -31,7 +29,8 @@ public class RepositorioSupermercado {
         String sqlQuery = "SELECT * FROM SUPERMERCADO" +
                 "WHERE Id = " + id + ";";
         try{
-            Object supermercado = SelectGeralObjeto(sqlQuery, Supermercado.class);
+            AcessadorBanco acessador = new AcessadorBanco();
+            Object supermercado = acessador.selectGeralObjeto(sqlQuery, Supermercado.class);
             return supermercado;
         }
         catch(Exception e){
@@ -45,7 +44,8 @@ public class RepositorioSupermercado {
     public void AddSupermercado(Supermercado supermercado){
         String sqlQuery = "";
         try{
-            AddOrUpdateOrDelete(sqlQuery, Supermercado.class);
+            AcessadorBanco acessador = new AcessadorBanco();
+            acessador.addOrUpdateOrDelete(sqlQuery, Supermercado.class);
         }
         catch(Exception e){
             e.printStackTrace();
