@@ -1,6 +1,6 @@
 package Entidades;
 
-public class Historic {
+public class Historico {
 
     long id;
     double[] lastHours;

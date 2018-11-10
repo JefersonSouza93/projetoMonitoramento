@@ -9,7 +9,7 @@ public class RepositorioSupermercado {
     public List selectSupermercadosEmRegiao(double latitudeMin,
         double longitudeMin, double latitudeMax, double longitudeMax){
 
-        String sqlQuery = "SELECT * FROM SUPERMERCADO" +
+        String sqlQuery = "SELECT * FROM SUPERMERCADO " +
                 "WHERE Latitude < {" + latitudeMin + "} AND Latitude > {" + latitudeMax + "}" +
                 "AND Longitude < {" + longitudeMin + "} AND Longitude > {" + longitudeMax + "}";
         try{
@@ -26,7 +26,7 @@ public class RepositorioSupermercado {
     }
 
     public Object SelectSupermercado(long id){
-        String sqlQuery = "SELECT * FROM SUPERMERCADO" +
+        String sqlQuery = "SELECT * FROM schemalotation2.Supermercado " +
                 "WHERE Id = " + id + ";";
         try{
             AcessadorBanco acessador = new AcessadorBanco();

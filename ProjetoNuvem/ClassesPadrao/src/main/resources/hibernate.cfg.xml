@@ -7,7 +7,7 @@
     <session-factory>
         <!-- Database connection settings -->
         <property name='connection.driver_class'>com.mysql.jdbc.Driver</property>
-        <property name='connection.url'>jdbc:mysql://lotation-database.c2x8lrefjf29.sa-east-1.rds.amazonaws.com:3306</property>
+        <property name='connection.url'>jdbc:mysql://lotation-database.c2x8lrefjf29.sa-east-1.rds.amazonaws.com:3306/schemalotation2</property>
         <property name='connection.username'>analistaLotacao9</property>
         <property name='connection.password'>analista_muito-T0P</property>
 
