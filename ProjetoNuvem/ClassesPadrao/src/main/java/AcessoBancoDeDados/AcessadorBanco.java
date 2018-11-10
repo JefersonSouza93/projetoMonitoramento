@@ -24,7 +24,6 @@ public class AcessadorBanco {
         query.addEntity(classe);
 
         try {
-
             tx = session.beginTransaction();
             List results = query.list();
             session.close();

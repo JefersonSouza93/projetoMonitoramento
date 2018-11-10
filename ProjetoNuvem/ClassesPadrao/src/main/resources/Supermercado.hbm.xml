@@ -4,10 +4,10 @@
         "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping>
-    <class name = "Supermercado" table = "EMPLOYEE">
+    <class name = "Entidades.Supermercado" table = "Supermercado">
 
         <meta attribute = "class-description">
-            This class contains the employee detail.
+            Essa classe contem os detalhes do supermercado
         </meta>
 
         <id name = "id" type = "int" column = "Id">

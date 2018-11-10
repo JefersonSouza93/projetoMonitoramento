@@ -1,46 +1,87 @@
 package AcessoRedis;
 
-import com.lambdaworks.redis.*;
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.JedisPoolConfig;
+import redis.clients.jedis.exceptions.JedisException;
+
+import java.util.Set;
 
 public class AcessadorRedis {
 
-    private static RedisClient client;
-    private static RedisConnection<String, String> connection;
+    //address of your redis server
+    private static final String redisHost = "localhost";
+    private static final Integer redisPort = 6379;
+    private static final String redisPassword = "xablau";
 
+    //the jedis connection pool..
+    private static JedisPool pool = null;
 
-    private static void Conectar() {
-        //client = new RedisClient(RedisURI);
-                //create("redis://password@host:port"));
-        //connection = client.connect();
+    public AcessadorRedis() {
+        //configure our pool connection
+        pool = new JedisPool(new JedisPoolConfig(), redisHost, redisPort,
+                10000, redisPassword);
     }
 
-    /**
-     * Seleciona um objeto unico do Redis.
-     * @param search o valor do topico do Redis.
-     * @return O string encontrado pelo Redis.
-     */
-    public static String SelectObjeto(String search){
-        Conectar();
-        String textObject = connection.get(search);
-        Desconectar();
-        return textObject;
+    public Set<String> getSets(String key){
+        Jedis jedis = pool.getResource();
+        try {
+            //after saving the data, lets retrieve them to be sure that it has really added in redis
+            Set members = jedis.smembers(key);
+            return members;
+        } catch (JedisException e) {
+            //if something wrong happen, return it back to the pool
+            if (null != jedis) {
+                pool.returnBrokenResource(jedis);
+                jedis = null;
+            }
+        } finally {
+            ///it's important to return the Jedis instance to the pool once you've finished using it
+            if (null != jedis)
+                pool.returnResource(jedis);
+            return null;
+        }
     }
 
-    /**
-     * Salva um string no Redis
-     * @param search string de busca
-     * @param textObject valor do objeto
-     */
-    public static void Salvar(String search, String textObject){
-        //salva json em uma nova entrada do Redis
-        Conectar();
-        connection.set(search, textObject);
-        Desconectar();
-        //map string to object
+    public String getSet(String key){
+        Jedis jedis = pool.getResource();
+        try {
+            //get objeto
+            String objeto = jedis.get(key);
+            return objeto;
+
+        } catch (JedisException e) {
+            //if something wrong happen, return it back to the pool
+            if (null != jedis) {
+                pool.returnBrokenResource(jedis);
+                jedis = null;
+            }
+        } finally {
+            ///it's important to return the Jedis instance to the pool once you've finished using it
+            if (null != jedis)
+                pool.returnResource(jedis);
+            return null;
+        }
     }
 
-    private static void Desconectar(){
-        connection.close();
-        client.shutdown();
+    public void addSet(String key, String jsonInformation) {
+        //let us first add some data in our redis server using Redis SET.
+        //get a jedis connection jedis connection pool
+        Jedis jedis = pool.getResource();
+        try {
+            //save to redis
+            jedis.sadd(key, jsonInformation);
+        } catch (JedisException e) {
+            //if something wrong happen, return it back to the pool
+            if (null != jedis) {
+                pool.returnBrokenResource(jedis);
+                jedis = null;
+            }
+        } finally {
+            ///it's important to return the Jedis instance to the pool once you've finished using it
+            if (null != jedis)
+                pool.returnResource(jedis);
+        }
     }
+
 }

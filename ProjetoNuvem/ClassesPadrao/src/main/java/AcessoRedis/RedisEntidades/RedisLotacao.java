@@ -1,9 +1,9 @@
 package AcessoRedis.RedisEntidades;
 
-import Entidades.*;
+import AcessoRedis.AcessadorRedis;
+
 import java.util.Calendar;
-import static AcessoRedis.AcessadorRedis.SelectObjeto;
-import static AcessoRedis.AcessadorRedis.Salvar;
+import java.util.Set;
 
 public class RedisLotacao {
 
@@ -14,10 +14,13 @@ public class RedisLotacao {
      */
     public double PegarLotacaoAtual(double supermercadoId) {
         //transformar entrada no string do Redis
+
         String busca = supermercadoId + ":" + Calendar.DATE  + ":" + Calendar.HOUR;
-        String resultado = SelectObjeto(busca);
+        AcessadorRedis jedis = new AcessadorRedis();
+        String resultado = jedis.getSet(busca);
         //mapear string recebido em Lotacao
-        return 1; //TODO:ARRUMAR ISSO
+        double lotacao = Double.parseDouble(resultado);
+        return lotacao;
     }
 
     /**
@@ -30,7 +33,8 @@ public class RedisLotacao {
         //transformar lotacao nos string do Redis
         String busca = supermercadoId + ":" + Calendar.DATE  + ":" + Calendar.HOUR;
         String objetoEnviado = "[{\"lotacaoAtual\":" + lotacao + ", }]";
-        Salvar(busca, String.valueOf(objetoEnviado));
+        AcessadorRedis jedis = new AcessadorRedis();
+        jedis.addSet(busca, objetoEnviado);
     }
 
     public void ConsolidaLotacao(Calendar nowDate, String supermercado){
