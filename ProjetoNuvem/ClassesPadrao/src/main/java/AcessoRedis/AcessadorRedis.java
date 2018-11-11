@@ -10,7 +10,7 @@ import java.util.Set;
 public class AcessadorRedis {
 
     //address of your redis server
-    private static final String redisHost = "localhost";
+    private static final String redisHost = "lotation.qu9dco.0001.usw2.cache.amazonaws.com";
     private static final Integer redisPort = 6379;
     private static final String redisPassword = "xablau";
 
@@ -19,8 +19,8 @@ public class AcessadorRedis {
 
     public AcessadorRedis() {
         //configure our pool connection
-        pool = new JedisPool(new JedisPoolConfig(), redisHost, redisPort,
-                10000, redisPassword);
+        pool = new JedisPool(new JedisPoolConfig(), redisHost, redisPort, 1000000000);
+                //10000, redisPassword);
     }
 
     public Set<String> getSets(String key){
