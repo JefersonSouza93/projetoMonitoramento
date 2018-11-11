@@ -1,9 +1,13 @@
 package Entidades;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
 
-@Entity @Table(name = "Supermercado")
+import javax.persistence.*;
+
+@Entity
+@Table(name = "Supermercado")
+@NamedQueries({@NamedQuery(name = "xoblou", query="SELECT * FROM Supermercado"),
+        @NamedQuery(name = "xoblou2", query="SELECT s FROM Supermercado s WHERE s.id = :id")
+}
+)
 public class Supermercado {
 
     long id;

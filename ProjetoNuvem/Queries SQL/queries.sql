@@ -36,5 +36,17 @@ CREATE TABLE `schemalotation2`.`HistoricoDiarioPorMesPorAno` (
   `SupermercadoId` INT NULL,
   `TimeStamp` TIMESTAMP(10) NULL,
   PRIMARY KEY (`Id`));
+  
+  CREATE TABLE `schemalotation2`.`Historico` (
+  `Id` INT NOT NULL,
+  `Dia` INT NULL,
+  `Mes` INT NULL,
+  `Ano` INT NULL,
+  `SupermercadoId` INT NULL,
+  `TimeStamp` TIMESTAMP(10) NULL,
+  PRIMARY KEY (`Id`));
+  
+INSERT INTO Supermercado VALUES (1, 'Labsoft', 'Laboratorio de Software', 50, 'Poli', 'Poli-Eletrica', -23.55, -45.00);
+INSERT INTO Supermercado VALUES (2, 'Sala1', 'Sala de aulas', 20, 'Poli', 'Poli-Eletrica', -23.50, -45.55);
 
 
