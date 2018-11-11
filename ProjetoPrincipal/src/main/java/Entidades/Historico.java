@@ -1,12 +1,22 @@
 package Entidades;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "Historico")
+@NamedQueries({
+        @NamedQuery(name = "Historico.findAll", query = "SELECT h FROM Historico h"),
+        @NamedQuery(name = "Historico.findBySupermercadoId", query = "SELECT h FROM Historico h WHERE h.supermercado.id = :supermercadoId")
+})
 public class Historico {
 
-    long id;
-    double[] lastHours;
-    double[] monthAverage;
-    double[] weekAverage;
+    private long id;
+    private String ultimoDia;
+    private String mediaMeses;
+    private String mediaDiasDaSemana;
+    private Supermercado supermercado;
 
+    @Id
     public long getId() {
         return id;
     }
@@ -14,24 +24,33 @@ public class Historico {
         this.id = id;
     }
 
-    public double[] getLastHours() {
-        return lastHours;
+    public String getUltimoDia() {
+        return ultimoDia;
     }
-    public void setLastHours(double[] lastHours) {
-        this.lastHours = lastHours;
-    }
-
-    public double[] getMonthAverage() {
-        return monthAverage;
-    }
-    public void setMonthAverage(double[] monthAverage) {
-        this.monthAverage = monthAverage;
+    public void setUltimoDia(String ultimoDia) {
+        this.ultimoDia = ultimoDia;
     }
 
-    public double[] getWeekAverage() {
-        return weekAverage;
+    public String getMediaMeses() {
+        return mediaMeses;
     }
-    public void setWeekAverage(double[] weekAverage) {
-        this.weekAverage = weekAverage;
+    public void setMediaMeses(String mediaMeses) {
+        this.mediaMeses = mediaMeses;
+    }
+
+    public String getMediaDiasDaSemana() {
+        return mediaDiasDaSemana;
+    }
+    public void setMediaDiasDaSemana(String mediaDiasDaSemana) {
+        this.mediaDiasDaSemana = mediaDiasDaSemana;
+    }
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "SupermercadoId")
+    public Supermercado getSupermercado(){
+        return this.supermercado;
+    }
+    public void setSupermercado(Supermercado supermercado) {
+        this.supermercado = supermercado;
     }
 }

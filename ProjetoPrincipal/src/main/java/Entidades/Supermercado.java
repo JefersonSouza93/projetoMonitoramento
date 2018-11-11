@@ -4,27 +4,31 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "Supermercado")
-@NamedQueries({@NamedQuery(name = "xoblou", query="SELECT * FROM Supermercado"),
-        @NamedQuery(name = "xoblou2", query="SELECT s FROM Supermercado s WHERE s.id = :id")
-}
-)
+@NamedQueries({
+        @NamedQuery(name = "Supermercado.findAll", query = "SELECT s FROM Supermercado s"),
+        @NamedQuery(name = "Supermercado.findById", query = "SELECT s FROM Supermercado s WHERE s.id = :id"),
+        @NamedQuery(name = "Supermercado.findByLongitudeAndLatitude", query = "SELECT s FROM Supermercado s " +
+                                    "WHERE s.latitude < :latitudeMax AND s.latitude > :latitudeMin  " +
+                                    "AND s.longitude < :longitudeMax AND s.longitude > :longitudeMin")
+})
 public class Supermercado {
 
-    long id;
-    String nome;
-    String descricao;
-    String rede;
-    double latitude;
-    double longitude;
-    String endereco;
-    double lotacaoAtual;
-    double lotacaoMaxima;
+    private Long id;
+    private String nome;
+    private String descricao;
+    private String rede;
+    private double latitude;
+    private double longitude;
+    private String endereco;
+    private double lotacaoAtual;
+    private Long lotacaoMaxima;
+    private Historico historico;
 
     @Id
-    public long getId() {
+    public Long getId() {
         return id;
     }
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -71,6 +75,7 @@ public class Supermercado {
         this.endereco = endereco;
     }
 
+    @Transient
     public double getLotacaoAtual() {
         return lotacaoAtual;
     }
@@ -78,11 +83,19 @@ public class Supermercado {
         this.lotacaoAtual = lotacaoAtual;
     }
 
-    public double getLotacaoMaxima() {
+    public Long getLotacaoMaxima() {
         return lotacaoMaxima;
     }
-    public void setLotacaoMaxima(long lotacaoMaxima) {
+    public void setLotacaoMaxima(Long lotacaoMaxima) {
         this.lotacaoMaxima = lotacaoMaxima;
     }
 
+    @OneToOne(mappedBy = "supermercado", cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY, optional = false)
+    public Historico getHistorico() {
+        return historico;
+    }
+    public void setHistorico(Historico historico){
+        this.historico = historico;
+    }
 }
