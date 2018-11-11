@@ -1,0 +1,17 @@
+sudo apt-get update
+sudo apt-get upgrade
+sudo apt-get install git
+sudo apt-get install build-essential 
+git clone https://github.com/pjreddie/darknet.git
+cd darknet
+make
+wget https://pjreddie.com/media/files/yolov3.weights 
+sudo apt install python
+sudo apt install python-pip
+git clone https://github.com/brian-yu/pedestrian-cam.git
+mv pedestrian-cam/* .
+rm -r pedestrian-cam
+nano prediction.py
+sudo apt update && sudo apt install -y libsm6 libxext6
+sudo apt-get install -y libxrender-dev
+./darknet detect cfg/yolov3.cfg yolov3.weights [caminho imagem]
