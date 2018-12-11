@@ -8,8 +8,8 @@ import javax.persistence.*;
         @NamedQuery(name = "Supermercado.findAll", query = "SELECT s FROM Supermercado s"),
         @NamedQuery(name = "Supermercado.findById", query = "SELECT s FROM Supermercado s WHERE s.id = :id"),
         @NamedQuery(name = "Supermercado.findByLongitudeAndLatitude", query = "SELECT s FROM Supermercado s " +
-                                    "WHERE s.latitude < :latitudeMax AND s.latitude > :latitudeMin  " +
-                                    "AND s.longitude < :longitudeMax AND s.longitude > :longitudeMin")
+                                    "WHERE s.latitude < :latitudeMin AND s.latitude > :latitudeMax  " +
+                                    "AND s.longitude < :longitudeMin AND s.longitude > :longitudeMax")
 })
 public class Supermercado {
 
