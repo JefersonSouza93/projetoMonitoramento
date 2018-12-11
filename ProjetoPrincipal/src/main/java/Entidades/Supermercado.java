@@ -79,14 +79,14 @@ public class Supermercado {
     public double getLotacaoAtual() {
         return lotacaoAtual;
     }
-    public void setLotacaoAtual(long lotacaoAtual) {
+    public void setLotacaoAtual(double lotacaoAtual) {
         this.lotacaoAtual = lotacaoAtual;
     }
 
     public Long getLotacaoMaxima() {
         return lotacaoMaxima;
     }
-    public void setLotacaoMaxima(Long lotacaoMaxima) {
+    public void setLotacaoMaxima(long lotacaoMaxima) {
         this.lotacaoMaxima = lotacaoMaxima;
     }
 

@@ -1,3 +1,4 @@
+import Entidades.AcessadorRedis.RedisLotacao;
 import Entidades.Historico;
 import Entidades.Supermercado;
 import com.amazonaws.services.lambda.runtime.Context;
@@ -21,6 +22,9 @@ public class FuncaoGetSupermercadosEmRegiao implements RequestHandler<RequestCla
             query.setParameter("longitudeMax", request.longitudeMax);
             List<Supermercado> result = query.getResultList();
             entityManagerFactory.close();
+
+            PegaLotacaoAtual(result);
+
             return new ResponseClass(result);
         }catch(Exception e){
             //prencher com handler adequado
@@ -29,5 +33,14 @@ public class FuncaoGetSupermercadosEmRegiao implements RequestHandler<RequestCla
 
         }
         return new ResponseClass();
+    }
+
+    private void PegaLotacaoAtual(List<Supermercado> supermercadoList){
+        //para cada supermercado, acessa Redis e preenche lotacao atual
+        RedisLotacao jedis = new RedisLotacao();
+        for(int i=0;i<supermercadoList.size();i++){
+            double lotacaoAtual = jedis.PegarLotacaoAtual(supermercadoList.get(i).getId());
+            supermercadoList.get(i).setLotacaoAtual(lotacaoAtual);
+        }
     }
 }
