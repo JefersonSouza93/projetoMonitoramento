@@ -15,7 +15,6 @@ public class Supermercado {
 
     private Long id;
     private String nome;
-    private String descricao;
     private String rede;
     private double latitude;
     private double longitude;
@@ -38,13 +37,6 @@ public class Supermercado {
     }
     public void setNome(String nome) {
         this.nome = nome;
-    }
-
-    public String getDescricao() {
-        return descricao;
-    }
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
     }
 
     public String getRede() {

@@ -23,7 +23,7 @@ public class FuncaoGetSupermercadosEmRegiao implements RequestHandler<RequestCla
             List<Supermercado> result = query.getResultList();
             entityManagerFactory.close();
 
-            PegaLotacaoAtual(result);
+            //PegaLotacaoAtual(result);
 
             return new ResponseClass(result);
         }catch(Exception e){
