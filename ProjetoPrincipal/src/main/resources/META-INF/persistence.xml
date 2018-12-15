@@ -7,12 +7,12 @@
 
         <properties>
             <property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver"/>
-            <property name="hibernate.connection.url" value="jdbc:mysql://lotation-database.c2x8lrefjf29.sa-east-1.rds.amazonaws.com:3306/schemalotation2"/>
+            <property name="hibernate.connection.url" value="jdbc:mysql://instant-lotation-oregon.ciog50gu0moi.us-west-2.rds.amazonaws.com:3306/schemalotation"/>
             <property name="hibernate.connection.autocommit" value="false"/>
-            <property name="hibernate.connection.username" value="analistaLotacao9"/>
-            <property name="hibernate.connection.password" value="analista_muito-T0P"/>
+            <property name="hibernate.connection.username" value="analistaLotacao8"/>
+            <property name="hibernate.connection.password" value="analista89"/>
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5Dialect"/>
-            <property name="hibernate.connection.CharSet" value="utf8"/>
+            <property name="hibernate.onnection.CharSet" value="utf8"/>
             <property name="hibernate.connection.characterEncoding" value="utf8"/>
             <property name="hibernate.connection.useUnicode" value="true"/>
             <property name="hibernate.show_sql" value="true"/>

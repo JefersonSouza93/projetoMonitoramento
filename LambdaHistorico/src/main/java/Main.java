@@ -5,11 +5,8 @@ public class Main {
 
         try{
             RequestClass request1 = new RequestClass();
-            request1.latitudeMin = -25;
-            request1.latitudeMax = -10;
-            request1.longitudeMin = -50;
-            request1.longitudeMax = -40;
-            FuncaoGetSupermercadosEmRegiao xablau = new FuncaoGetSupermercadosEmRegiao();
+            request1.id = 1;
+            FuncaoGetHistoricoSupermercado xablau = new FuncaoGetHistoricoSupermercado();
             xablau.handleRequest(request1, null);
         }catch(Exception e){
             e.printStackTrace();

@@ -1,18 +1,19 @@
-import Entidades.Supermercado;
+import Entidades.SupermercadoResposta;
+
 import java.util.List;
 
 public class ResponseClass {
-    List<Supermercado> supermercadoList;
+    List<SupermercadoResposta> supermercadoList;
 
-    public List<Supermercado> getSupermercadoList() {
+    public List<SupermercadoResposta> getSupermercadoList() {
         return supermercadoList;
     }
 
-    public void setSupermercadoList(List<Supermercado> supermercadoList) {
+    public void setSupermercadoList(List<SupermercadoResposta> supermercadoList) {
         this.supermercadoList = supermercadoList;
     }
 
-    public ResponseClass(List<Supermercado> supermercadoList) {
+    public ResponseClass(List<SupermercadoResposta> supermercadoList) {
         this.supermercadoList = supermercadoList;
     }
 

@@ -1,17 +1,6 @@
 package Entidades;
 
-import javax.persistence.*;
-
-@Entity
-@Table(name = "Supermercado")
-@NamedQueries({
-        @NamedQuery(name = "Supermercado.findAll", query = "SELECT s FROM Supermercado s"),
-        @NamedQuery(name = "Supermercado.findById", query = "SELECT s FROM Supermercado s WHERE s.id = :id"),
-        @NamedQuery(name = "Supermercado.findByLongitudeAndLatitude", query = "SELECT s FROM Supermercado s " +
-                                    "WHERE s.latitude > :latitudeMin AND s.latitude < :latitudeMax  " +
-                                    "AND s.longitude > :longitudeMin AND s.longitude < :longitudeMax")
-})
-public class Supermercado {
+public class SupermercadoResposta {
 
     private Long id;
     private String nome;
@@ -21,9 +10,7 @@ public class Supermercado {
     private String endereco;
     private double lotacaoAtual;
     private Long lotacaoMaxima;
-    private Historico historico;
 
-    @Id
     public Long getId() {
         return id;
     }
@@ -31,7 +18,6 @@ public class Supermercado {
         this.id = id;
     }
 
-    //@Column (name = "Nome")
     public String getNome() {
         return nome;
     }
@@ -67,7 +53,6 @@ public class Supermercado {
         this.endereco = endereco;
     }
 
-    @Transient
     public double getLotacaoAtual() {
         return lotacaoAtual;
     }
@@ -82,12 +67,4 @@ public class Supermercado {
         this.lotacaoMaxima = lotacaoMaxima;
     }
 
-    @OneToOne(mappedBy = "supermercado", cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY, optional = false)
-    public Historico getHistorico() {
-        return historico;
-    }
-    public void setHistorico(Historico historico){
-        this.historico = historico;
-    }
 }

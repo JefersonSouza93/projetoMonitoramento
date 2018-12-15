@@ -1,10 +1,10 @@
 import Entidades.AcessadorRedis.RedisLotacao;
-import Entidades.Historico;
 import Entidades.Supermercado;
+import Entidades.SupermercadoResposta;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
-
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class FuncaoGetSupermercadosEmRegiao implements RequestHandler<RequestClass, ResponseClass>{
@@ -22,10 +22,14 @@ public class FuncaoGetSupermercadosEmRegiao implements RequestHandler<RequestCla
             query.setParameter("longitudeMax", request.longitudeMax);
             List<Supermercado> result = query.getResultList();
             entityManagerFactory.close();
-
-            //PegaLotacaoAtual(result);
-
-            return new ResponseClass(result);
+            try{
+                PegaLotacaoAtual(result);
+            }
+            catch(Exception e){
+                e.printStackTrace();
+            }
+            List<SupermercadoResposta> respostaList = MapearResposta(result);
+            return new ResponseClass(respostaList);
         }catch(Exception e){
             //prencher com handler adequado
             e.printStackTrace();
@@ -33,6 +37,23 @@ public class FuncaoGetSupermercadosEmRegiao implements RequestHandler<RequestCla
 
         }
         return new ResponseClass();
+    }
+
+    private List<SupermercadoResposta> MapearResposta(List<Supermercado> supermercadoList){
+        List<SupermercadoResposta> listResposta = new ArrayList<SupermercadoResposta>();
+        for(int i=0;i<supermercadoList.size();i++){
+            SupermercadoResposta resposta1 = new SupermercadoResposta();
+            resposta1.setId(supermercadoList.get(1).getId());
+            resposta1.setLatitude(supermercadoList.get(1).getLatitude());
+            resposta1.setLongitude(supermercadoList.get(1).getLongitude());
+            resposta1.setRede(supermercadoList.get(1).getRede());
+            resposta1.setEndereco(supermercadoList.get(1).getEndereco());
+            resposta1.setNome(supermercadoList.get(1).getNome());
+            resposta1.setLotacaoMaxima(supermercadoList.get(1).getLotacaoMaxima());
+            resposta1.setLotacaoAtual(supermercadoList.get(1).getLotacaoAtual());
+            listResposta.add(resposta1);
+        }
+        return listResposta;
     }
 
     private void PegaLotacaoAtual(List<Supermercado> supermercadoList){
